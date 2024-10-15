@@ -12,7 +12,7 @@ model = load_model()
 
 st.title("scDEL Calculator")
 
-coo = st.selectbox("Cell of Origin", options=[0, 1], format_func=lambda x: "GCB" if x == 0 else "ABC")
+coo = st.selectbox("Cell of Origin (Hans)", options=[0, 1], format_func=lambda x: "GCB" if x == 0 else "non GCB")
 
 col1, col2 = st.columns(2)
 with col1:
@@ -44,5 +44,5 @@ st.write(f"Calculated MYC+ BCL2+ BCL6- %: {m2p6n:.2f}")
 input_data = np.array([[m2p6n, coo, myc, bcl2, bcl6]])
 
 if st.button("Calculate Relapse Risk"):
-    probability = model.predict_proba(input_data)[0][1]  # Assuming binary classification
+    probability = model.predict_proba(input_data)[0][1]  
     st.write(f"Probability of Relapse Risk on R-CHOP at 2 years: {probability:.2%}")

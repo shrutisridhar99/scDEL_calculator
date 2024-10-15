@@ -12,7 +12,7 @@ model = load_model()
 
 st.title("scDEL Calculator")
 
-coo = st.selectbox("Cell of Origin", ["GCB", "ABC"])   
+coo = st.selectbox("Cell of Origin", options=[0, 1], format_func=lambda x: "GCB" if x == 0 else "ABC")
 
 col1, col2 = st.columns(2)
 with col1:

@@ -10,7 +10,7 @@ def load_model():
 
 model = load_model()
 
-st.title("Relapse Risk Calculator")
+st.title("scDEL Calculator")
 
 coo = st.selectbox("COO", [0, 1])
 
@@ -45,4 +45,4 @@ input_data = np.array([[m2p6n, coo, myc, bcl2, bcl6]])
 
 if st.button("Calculate Relapse Risk"):
     probability = model.predict_proba(input_data)[0][1]  # Assuming binary classification
-    st.write(f"Probability of Relapse Risk at 2 years: {probability:.2%}")
+    st.write(f"Probability of Relapse Risk on R-CHOP at 2 years: {probability:.2%}")

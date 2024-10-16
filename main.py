@@ -137,7 +137,7 @@ st.sidebar.info("""
 """)
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("Refer: https://bitly.cx/Jxcoz ")
+st.sidebar.markdown("[Reference: Patterns of Oncogene Coexpression at Single-Cell Resolution Influence Survival in Lymphoma](https://bitly.cx/Jxcoz)")
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("Created by Kanav and Shruti - SAIL Lab CSI")

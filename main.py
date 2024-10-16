@@ -3,6 +3,15 @@ import pandas as pd
 import numpy as np
 import os 
 
+hide_st_style = """
+
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+
+"""
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
 @st.cache_resource
 def load_model(path):
     with open(path, "rb") as file:
@@ -138,11 +147,4 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("Created by Kanav and Shruti - SAIL Lab CSI")
 st.sidebar.markdown("© 2024 SAIL Lab. All rights reserved.")
 
-hide_streamlit_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 

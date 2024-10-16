@@ -120,8 +120,6 @@ if st.button("Calculate Relapse Risk"):
         st.error("Please ensure all inputs are valid and try again.")
 
 
-
-        
 st.sidebar.title("About")
 st.sidebar.info(
     "This app calculates the relapse risk for DLBCL patients based on the scDEL model. "

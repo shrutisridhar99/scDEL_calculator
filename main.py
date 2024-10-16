@@ -60,11 +60,13 @@ if st.button("Calculate Relapse Risk"):
         # Create two columns
         col1, col2 = st.columns(2)
         
-        # Function to display model results
+        # Function to display model results and get predictions
         def display_model_results(models, columns):
+            predictions = {}
             for i, (model_name, model) in enumerate(models.items()):
                 column = columns[i % len(columns)]
                 probability = model.predict_proba(input_data)[0][1]
+                predictions[model_name] = probability
                 column.markdown(
                     f"<div style='background-color: #080d07; padding: 10px; border-radius: 5px; margin-bottom: 10px;'>"
                     f"<span style='color: #1e88e5; font-weight: bold;'>{model_name}:</span> "
@@ -72,8 +74,35 @@ if st.button("Calculate Relapse Risk"):
                     "</div>",
                     unsafe_allow_html=True
                 )
+            return predictions
         
-        display_model_results(models, [col1, col2])
+        predictions = display_model_results(models, [col1, col2])
+        
+        # Determine majority prediction
+        majority_high = sum(prob > 0.5 for prob in predictions.values()) > len(predictions) / 2
+        majority_predictions = {name: prob for name, prob in predictions.items() if (prob > 0.5) == majority_high}
+        minority_predictions = {name: prob for name, prob in predictions.items() if (prob > 0.5) != majority_high}
+        
+        # Calculate average of majority predictions
+        majority_avg = sum(majority_predictions.values()) / len(majority_predictions)
+        
+        # Display final prediction
+        st.markdown("---")
+        st.subheader("Final Prediction:")
+        st.markdown(f"<div style='background-color: #1c2a1f; padding: 20px; border-radius: 10px; margin-bottom: 20px;'>"
+                    f"<span style='color: #4caf50; font-size: 24px; font-weight: bold;'>"
+                    f"{'High' if majority_high else 'Low'} Risk of Relapse</span><br>"
+                    f"<span style='color: #81c784; font-size: 18px;'>Average Probability: {majority_avg:.2%}</span>"
+                    "</div>", unsafe_allow_html=True)
+        
+        # Display majority and minority models
+        st.markdown("<span style='color: #4caf50; font-weight: bold;'>Models in Majority:</span>", unsafe_allow_html=True)
+        for name in majority_predictions.keys():
+            st.markdown(f"- {name}")
+        
+        st.markdown("<br><span style='color: #ff7043; font-weight: bold;'>Models in Minority:</span>", unsafe_allow_html=True)
+        for name in minority_predictions.keys():
+            st.markdown(f"- {name}")
         
     except Exception as e:
         st.error(f"An error occurred while calculating the relapse risk: {str(e)}")

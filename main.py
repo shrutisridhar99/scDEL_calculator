@@ -137,3 +137,11 @@ st.sidebar.info("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("Created by Kanav and Shruti - SAIL Lab CSI")
 st.sidebar.markdown("© 2024 SAIL Lab. All rights reserved.")
+
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True) 

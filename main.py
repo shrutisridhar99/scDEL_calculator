@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-
+import os 
 
 @st.cache_resource
 def load_model(path):
@@ -14,20 +14,23 @@ def validate_percentage(value):
         return max(0, min(100, value))
     except ValueError:
         return 50 
+    
+
+
+def load_all_models(directory):
+    models = {}
+    for filename in os.listdir(directory):
+        if filename.endswith('.pkl'):
+            model_name = filename.replace('_Model.pkl', '').replace('_', ' ').title()
+            model_path = os.path.join(directory, filename)
+            models[model_name] = load_model(model_path)
+    return models    
 
 st.set_page_config(page_title="scDEL Calculator", page_icon="🧬", layout="wide")
 
 st.title("scDEL Calculator")
 
-model_GB = load_model('model_test/gradient_boosting_Model.pkl')
-model_rf = load_model('model_test/random_forest_Model.pkl')
-model_knn = load_model('model_test/k-nearest_neighbors_Model.pkl')
-model_xgboost = load_model('model_test/xgboost_Model.pkl')
-
-ov_model_GB = load_model('model_testov/gradient_boosting_Model.pkl')
-ov_model_rf = load_model('model_testov/random_forest_Model.pkl')
-ov_model_knn = load_model('model_testov/k-nearest_neighbors_Model.pkl')
-ov_model_xgboost = load_model('model_testov/xgboost_Model.pkl')
+models = load_all_models('model_test')
 
 
 coo = st.selectbox("Cell of Origin (Hans)", options=[0, 1], format_func=lambda x: "GCB" if x == 0 else "non-GCB")
@@ -58,9 +61,9 @@ if st.button("Calculate Relapse Risk"):
         col1, col2 = st.columns(2)
         
         # Function to display model results
-        def display_model_results(models, column, title):
-            column.markdown(f"<h3 style='text-align: center;'>{title}</h3>", unsafe_allow_html=True)
-            for model_name, model in models:
+        def display_model_results(models, columns):
+            for i, (model_name, model) in enumerate(models.items()):
+                column = columns[i % len(columns)]
                 probability = model.predict_proba(input_data)[0][1]
                 column.markdown(
                     f"<div style='background-color: #080d07; padding: 10px; border-radius: 5px; margin-bottom: 10px;'>"
@@ -70,27 +73,13 @@ if st.button("Calculate Relapse Risk"):
                     unsafe_allow_html=True
                 )
         
-        # Regular models
-        regular_models = [
-            ("Gradient Boosting", model_GB),
-            ("Random Forest", model_rf),
-            ("K-Nearest Neighbors", model_knn),
-            ("XGBoost", model_xgboost)
-        ]
-        display_model_results(regular_models, col1, "Regular Models")
+        display_model_results(models, [col1, col2])
         
-        # Oversampled models
-        oversampled_models = [
-            ("Gradient Boosting", ov_model_GB),
-            ("Random Forest", ov_model_rf),
-            ("K-Nearest Neighbors", ov_model_knn),
-            ("XGBoost", ov_model_xgboost)
-        ]
-        display_model_results(oversampled_models, col2, "Oversampled Models")
-
     except Exception as e:
         st.error(f"An error occurred while calculating the relapse risk: {str(e)}")
         st.error("Please ensure all inputs are valid and try again.")
+        
+
 
 
         

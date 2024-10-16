@@ -27,7 +27,19 @@ def load_all_models(directory):
 
 st.set_page_config(page_title="scDEL Calculator", page_icon="🧬", layout="wide")
 
-st.title("scDEL Calculator")
+st.markdown("""
+    <style>
+    .main {
+        background-color: #f0f2f6;
+    }
+    h1, h2, h3 {
+        color: #0066ccf;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+st.title("scDEL Calculator: DLBCL Relapse Risk Assessment")
+
 
 models = load_all_models('model_test')
 
@@ -121,11 +133,19 @@ if st.button("Calculate Relapse Risk"):
         st.error("Please ensure all inputs are valid and try again.")
 
 
-st.sidebar.title("About")
-st.sidebar.info(
-    "This app calculates the relapse risk for DLBCL patients based on the scDEL machine learning models. "
-    "Enter the required information and click 'Calculate Relapse Risk' to get the result."
-)
+st.sidebar.title("About scDEL Calculator")
+st.sidebar.info("""
+    The scDEL Calculator is an advanced tool for assessing relapse risk in Diffuse Large B-Cell Lymphoma (DLBCL) patients. 
+    It utilizes machine learning models to provide accurate risk assessments based on key biomarkers.
+
+    **How to use:**
+    1. Enter the patient's Cell of Origin (GCB or non-GCB)
+    2. Adjust the sliders or enter values for MYC, BCL2, and BCL6 percentages
+    3. Click 'Calculate Relapse Risk' to view the results
+
+    For more information or support, please contact the SAIL Lab CSI.
+""")
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("Created by Kanav and Shruti - SAIL Lab CSI")
+st.sidebar.markdown("© 2024 SAIL Lab. All rights reserved.")

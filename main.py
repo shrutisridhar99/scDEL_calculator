@@ -15,8 +15,6 @@ def validate_percentage(value):
     except ValueError:
         return 50 
     
-
-
 def load_all_models(directory):
     models = {}
     for filename in os.listdir(directory):
@@ -25,6 +23,7 @@ def load_all_models(directory):
             model_path = os.path.join(directory, filename)
             models[model_name] = load_model(model_path)
     return models    
+
 
 st.set_page_config(page_title="scDEL Calculator", page_icon="🧬", layout="wide")
 
@@ -57,40 +56,23 @@ if st.button("Calculate Relapse Risk"):
     try:
         st.subheader("Probability of Relapse Risk on R-CHOP at 2 years:")
         
-        # Create two columns
-        col1, col2 = st.columns(2)
-        
-        # Function to display model results and get predictions
-        def display_model_results(models, columns):
+        def calculate_model_results(models):
             predictions = {}
-            for i, (model_name, model) in enumerate(models.items()):
-                column = columns[i % len(columns)]
+            for model_name, model in models.items():
                 probability = model.predict_proba(input_data)[0][1]
                 predictions[model_name] = probability
-                column.markdown(
-                    f"<div style='background-color: #080d07; padding: 10px; border-radius: 5px; margin-bottom: 10px;'>"
-                    f"<span style='color: #1e88e5; font-weight: bold;'>{model_name}:</span> "
-                    f"<span style='color: #43a047; font-weight: bold;'>{probability:.2%}</span>"
-                    "</div>",
-                    unsafe_allow_html=True
-                )
             return predictions
         
-        predictions = display_model_results(models, [col1, col2])
+        predictions = calculate_model_results(models)
         
-        # Determine majority prediction
-        majority_high = sum(prob > 0.5 for prob in predictions.values()) > len(predictions) / 2
-        majority_predictions = {name: prob for name, prob in predictions.items() if (prob > 0.5) == majority_high}
-        minority_predictions = {name: prob for name, prob in predictions.items() if (prob > 0.5) != majority_high}
-        
-        # Calculate average of majority predictions
-        majority_avg = sum(majority_predictions.values()) / len(majority_predictions)
+        # Calculate average probability
+        avg_probability = sum(predictions.values()) / len(predictions)
         
         # Determine risk level and background color
-        if majority_avg < 0.33:
+        if avg_probability < 0.33:
             risk_level = "Low"
             bg_color = "#4caf50"  # Green
-        elif majority_avg < 0.66:
+        elif avg_probability < 0.66:
             risk_level = "Medium"
             bg_color = "#ffd54f"  # Yellow
         else:
@@ -103,10 +85,29 @@ if st.button("Calculate Relapse Risk"):
         st.markdown(f"<div style='background-color: {bg_color}; padding: 20px; border-radius: 10px; margin-bottom: 20px;'>"
                     f"<span style='color: #ffffff; font-size: 24px; font-weight: bold;'>"
                     f"{risk_level} Risk of Relapse</span><br>"
-                    f"<span style='color: #ffffff; font-size: 18px;'>Average Probability: {majority_avg:.2%}</span>"
+                    f"<span style='color: #ffffff; font-size: 18px;'>Average Probability: {avg_probability:.2%}</span>"
                     "</div>", unsafe_allow_html=True)
         
-        # Display majority and minority models
+        # Create a dropdown for individual model probabilities
+        show_probabilities = st.expander("Show Individual Model Probabilities", expanded=False)
+        
+        with show_probabilities:
+            col1, col2 = st.columns(2)
+            for i, (model_name, probability) in enumerate(predictions.items()):
+                column = col1 if i % 2 == 0 else col2
+                column.markdown(
+                    f"<div style='background-color: #080d07; padding: 10px; border-radius: 5px; margin-bottom: 10px;'>"
+                    f"<span style='color: #1e88e5; font-weight: bold;'>{model_name}:</span> "
+                    f"<span style='color: #43a047; font-weight: bold;'>{probability:.2%}</span>"
+                    "</div>",
+                    unsafe_allow_html=True
+                )
+        
+        # Calculate and display majority and minority models
+        majority_high = sum(prob > 0.5 for prob in predictions.values()) > len(predictions) / 2
+        majority_predictions = {name: prob for name, prob in predictions.items() if (prob > 0.5) == majority_high}
+        minority_predictions = {name: prob for name, prob in predictions.items() if (prob > 0.5) != majority_high}
+        
         st.markdown("<span style='color: #4caf50; font-weight: bold;'>Models in Majority:</span>", unsafe_allow_html=True)
         for name in majority_predictions.keys():
             st.markdown(f"- {name}")
@@ -122,6 +123,9 @@ if st.button("Calculate Relapse Risk"):
 
 st.sidebar.title("About")
 st.sidebar.info(
-    "This app calculates the relapse risk for DLBCL patients based on the scDEL model. "
+    "This app calculates the relapse risk for DLBCL patients based on the scDEL machine learning models. "
     "Enter the required information and click 'Calculate Relapse Risk' to get the result."
 )
+
+st.sidebar.markdown("---")
+st.sidebar.markdown("Created by Kanav and Shruti - SAIL Lab CSI")

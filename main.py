@@ -141,8 +141,6 @@ st.sidebar.markdown("© 2024 SAIL Lab. All rights reserved.")
 hide_streamlit_style = """
             <style>
             #MainMenu {visibility: hidden;}
-            #stToolbar {visibility: hidden;}
-            #GithubIcon {visibility: hidden;}
             footer {visibility: hidden;}
             </style>
             """

@@ -30,9 +30,7 @@ st.set_page_config(page_title="scDEL Calculator", page_icon="🧬", layout="wide
 
 st.title("scDEL Calculator")
 
-
 models = load_all_models('model_test')
-
 
 coo = st.selectbox("Cell of Origin (Hans)", options=[0, 1], format_func=lambda x: "GCB" if x == 0 else "non-GCB")
 

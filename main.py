@@ -86,13 +86,24 @@ if st.button("Calculate Relapse Risk"):
         # Calculate average of majority predictions
         majority_avg = sum(majority_predictions.values()) / len(majority_predictions)
         
+        # Determine risk level and background color
+        if majority_avg < 0.33:
+            risk_level = "Low"
+            bg_color = "#4caf50"  # Green
+        elif majority_avg < 0.66:
+            risk_level = "Medium"
+            bg_color = "#ffd54f"  # Yellow
+        else:
+            risk_level = "High"
+            bg_color = "#ef5350"  # Red
+        
         # Display final prediction
         st.markdown("---")
         st.subheader("Final Prediction:")
-        st.markdown(f"<div style='background-color: #1c2a1f; padding: 20px; border-radius: 10px; margin-bottom: 20px;'>"
-                    f"<span style='color: #4caf50; font-size: 24px; font-weight: bold;'>"
-                    f"{'High' if majority_high else 'Low'} Risk of Relapse</span><br>"
-                    f"<span style='color: #81c784; font-size: 18px;'>Average Probability: {majority_avg:.2%}</span>"
+        st.markdown(f"<div style='background-color: {bg_color}; padding: 20px; border-radius: 10px; margin-bottom: 20px;'>"
+                    f"<span style='color: #ffffff; font-size: 24px; font-weight: bold;'>"
+                    f"{risk_level} Risk of Relapse</span><br>"
+                    f"<span style='color: #ffffff; font-size: 18px;'>Average Probability: {majority_avg:.2%}</span>"
                     "</div>", unsafe_allow_html=True)
         
         # Display majority and minority models
@@ -107,7 +118,6 @@ if st.button("Calculate Relapse Risk"):
     except Exception as e:
         st.error(f"An error occurred while calculating the relapse risk: {str(e)}")
         st.error("Please ensure all inputs are valid and try again.")
-        
 
 
 

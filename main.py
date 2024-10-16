@@ -74,7 +74,7 @@ if st.button("Calculate Relapse Risk"):
             bg_color = "#4caf50"  # Green
         elif avg_probability < 0.66:
             risk_level = "Medium"
-            bg_color = "#ffd54f"  # Yellow
+            bg_color = "#d9b238"  # Yellow
         else:
             risk_level = "High"
             bg_color = "#ef5350"  # Red

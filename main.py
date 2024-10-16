@@ -138,7 +138,7 @@ st.sidebar.info("""
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("References:")
-st.sidebar.markdown("Hoppe, Michal Marek, et al. “Patterns of Oncogene Coexpression at Single-Cell Resolution Influence Survival in Lymphoma.” American Association for Cancer Research, American Association for Cancer Research, 4 May 2023, aacrjournals.org/cancerdiscovery/article/13/5/1144/726201/Patterns-of-Oncogene-Coexpression-at-Single-Cell.")
+st.sidebar.markdown("Hoppe, Michal Marek, et al. “Patterns of Oncogene Coexpression at Single-Cell Resolution Influence Survival in Lymphoma.” American Association for Cancer Research, American Association for Cancer Research, 4 May 2023, https://bitly.cx/Jxcoz")
 st.sidebar.markdown("---")
 st.sidebar.markdown("Created by Kanav and Shruti - SAIL Lab CSI")
 st.sidebar.markdown("© 2024 SAIL Lab. All rights reserved.")

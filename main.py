@@ -27,18 +27,8 @@ def load_all_models(directory):
 
 st.set_page_config(page_title="scDEL Calculator", page_icon="🧬", layout="wide")
 
-st.markdown("""
-    <style>
-    .main {
-        background-color: #f0f2f6;
-    }
-    h1, h2, h3 {
-        color: #0066ccf;
-    }
-    </style>
-    """, unsafe_allow_html=True)
 
-st.title("scDEL Calculator: DLBCL Relapse Risk Assessment")
+st.title("scDEL Calculator")
 
 
 models = load_all_models('model_test')
